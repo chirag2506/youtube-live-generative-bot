@@ -5,7 +5,14 @@
         "Port" : 8080,
         "IsDev": true
     },
-    "Database":{
-        
+    "GCP": {
+        "ClientCredentials": "config/client_secret.json",
+        "Scope": [
+            "https://www.googleapis.com/auth/youtube",
+            "https://www.googleapis.com/auth/youtube.force-ssl",
+            "https://www.googleapis.com/auth/youtube.readonly"
+            
+        ],
+        "CallbackURL": "http://localhost:8080/auth/callback"
     }
 }
