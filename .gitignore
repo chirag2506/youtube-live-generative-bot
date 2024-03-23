@@ -1,2 +1,7 @@
 testFiles/*
 credentials.json
+__pycache__
+.env
+logs/*
+venv
+client_secret.json
