@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, request
+from flask import Blueprint, redirect, request, session
 from appUtils import configuration, writeJson, json
 from google_auth_oauthlib.flow import Flow
 
@@ -12,13 +12,12 @@ flow = Flow.from_client_secrets_file(
 
 @blueprint.route('/login')
 def login():
-    authorizationUrl , state = flow.authorization_url(access_type='offline')
+    authorizationUrl , state = flow.authorization_url(prompt= 'consent', access_type='offline', include_granted_scopes='true')
     return redirect(authorizationUrl)
 
 @blueprint.route("/callback")
 def callback():
-    print(request.url)
     flow.fetch_token(authorization_response= request.url)
     credentials = flow.credentials
-    writeJson("./token.json", json.loads(credentials.to_json()))
+    writeJson(configuration["GCP"]["OAuthToken"], json.loads(credentials.to_json()))
     return redirect('/home')
