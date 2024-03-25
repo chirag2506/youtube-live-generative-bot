@@ -1,5 +1,6 @@
-from flask import Blueprint, redirect, request, session
-from appUtils import configuration, writeJson, json
+from flask import Blueprint, redirect, request
+from appUtils import configuration
+from helpers.youtubeFunctionalities.credentials import write as writeCred
 from google_auth_oauthlib.flow import Flow
 
 blueprint = Blueprint('authRoutes', __name__, template_folder= 'templates')
@@ -19,5 +20,5 @@ def login():
 def callback():
     flow.fetch_token(authorization_response= request.url)
     credentials = flow.credentials
-    writeJson(configuration["GCP"]["OAuthToken"], json.loads(credentials.to_json()))
+    writeCred(creds= credentials)
     return redirect('/home')
