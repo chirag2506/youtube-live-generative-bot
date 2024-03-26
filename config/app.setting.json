@@ -5,6 +5,9 @@
         "Port" : 8080,
         "IsDev": true
     },
+    "Youtube": {
+        "Mods": "config/mods.json"
+    },
     "GCP": {
         "ClientCredentials": "config/client_secret.json",
         "OAuthToken": "config/token.json",

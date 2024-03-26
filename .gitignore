@@ -6,4 +6,5 @@ __pycache__
 logs/*
 venv
 client_secret.json
+mods.json
 screenshots/*
