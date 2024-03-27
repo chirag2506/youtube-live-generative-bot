@@ -1,6 +1,7 @@
 from logger import putlog
 import json
 import os
+from helpers.youtubeFunctionalities.schemas import Message
 
 log = putlog(__file__)
 
@@ -51,3 +52,9 @@ def writeJson(filename, content):
 
 configFile = "config/app.setting.json"
 configuration = readJson(configFile)
+
+def respondToChat(message: Message):
+    command = message.text.split(" ")[0][1:]
+    if(command.lower() == "about".lower()):
+        True
+    return
