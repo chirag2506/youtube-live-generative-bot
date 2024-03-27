@@ -13,7 +13,8 @@ def getLiveChats(client: Resource, liveChatId: str,  pageToken: str = "", part: 
             message = Message(
                 id= item.get("id", ""),
                 userId= item.get("snippet", {}).get("authorChannelId", ""),
-                text= item.get("snippet", {}).get("displayMessage", "")
+                text= item.get("snippet", {}).get("displayMessage", ""),
+                pubTime= item.get("snippet", {}).get("publishedAt", "")
             )
             chat.messages.append(message)
             del message

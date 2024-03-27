@@ -10,6 +10,7 @@ class Message(JsonModel):
     id: str
     userId: str
     text: str
+    pubTime: str
     
 class Chat(JsonModel):
     messages: List[Message]
