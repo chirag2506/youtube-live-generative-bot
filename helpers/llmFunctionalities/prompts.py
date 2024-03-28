@@ -1,0 +1,1 @@
+myInfoPrompt = """Enter your info prompt here for the bot to respond"""

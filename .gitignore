@@ -8,4 +8,3 @@ venv
 client_secret.json
 mods.json
 screenshots/*
-helpers/llmFunctionalities/prompts.py

@@ -27,8 +27,16 @@ def getLiveChats(client: Resource, liveChatId: str,  pageToken: str = "", part: 
     
 def insertLiveChat(client: Resource, liveChatId: str, message: str, part: str = "snippet"):
     try:
-        True
-        # ytResponse = client.liveChatMessages().list(part=part, liveChatId= liveChatId, pageToken= pageToken).execute()
+        resource = {
+            "snippet": {
+                "liveChatId": liveChatId,
+                "textMessageDetails": {
+                "messageText": message
+                },
+                "type": "textMessageEvent"
+            }
+        }
+        ytResponse = client.liveChatMessages().insert(part=part, body= resource).execute()
         # writeJson("./chats.json", ytResponse)
     except Exception as e:
         log.error("Error in sending message: {}".format(e))
