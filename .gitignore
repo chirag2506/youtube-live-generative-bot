@@ -8,3 +8,4 @@ venv
 client_secret.json
 mods.json
 screenshots/*
+prompts.py
