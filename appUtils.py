@@ -1,8 +1,6 @@
 from logger import putlog
 import json
 import os
-from helpers.youtubeFunctionalities.schemas import Message
-from helpers.llmFunctionalities.llm import respondToFaq
 
 log = putlog(__file__)
 
@@ -53,21 +51,3 @@ def writeJson(filename, content):
 
 configFile = "config/app.setting.json"
 configuration = readJson(configFile)
-
-def respondToChat(client, message: Message, chatId: str):
-    from helpers.youtubeFunctionalities.chat import insertLiveChat
-    query = message.text.split(" ")
-    command = query[0][1:]
-    if(command.lower() == "ask"):
-        query.pop(0)
-        question = (" ").join(query)
-        response = respondToFaq(question)
-        print(response)
-        True
-    else:
-        response = "Valid command: !ask"
-    del query
-    del command
-    insertLiveChat(client, chatId, response)
-    del response
-    return

@@ -2,9 +2,9 @@ from dotenv import load_dotenv
 load_dotenv()
 from helpers.youtubeFunctionalities.client import getClient
 from helpers.youtubeFunctionalities.stream import getStreamChatId
-from helpers.youtubeFunctionalities.chat import getLiveChats
+from helpers.youtubeFunctionalities.chat import getLiveChats, respondToChat
 from helpers.youtubeFunctionalities.moderators import getModsList
-from appUtils import log, configuration, readJson, respondToChat
+from appUtils import log, configuration, readJson
 import os, threading, time
 
 streamId = os.environ.get("STREAM_ID", "")
@@ -21,10 +21,10 @@ def handleChats(client, chatId):
         for message in chats.messages:
             print("User: ", message.userId)
             print("Text: ", message.text)
-            print("Text: ", message.pubTime)
+            print("Time: ", message.pubTime)
             print("*"*100)
             if message.text.startswith("!"):
-                respondToChat(client, message, chatId)
+                respondToChat(client, message, chatId, mods)
         print("*"*100)
         nextPageToken = chats.nextPage
         del chats

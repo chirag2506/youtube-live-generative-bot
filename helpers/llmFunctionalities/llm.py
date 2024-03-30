@@ -1,12 +1,15 @@
 from langchain_openai import OpenAI
 from helpers.llmFunctionalities.prompts import *
-# from appUtils import log, configuration
+from appUtils import log, configuration
+
+#make sure to add helpers/llmFunctionalities/prompts.py file
+#prompts.py, add myInfoPrompt variable which will contain context for LLM to answer
 
 defaultLlm = OpenAI(
-    # model= configuration["LLM"]["OpenAI"]["Model"],
-    # temperature= configuration["LLM"]["OpenAI"]["Temperature"],
-    # max_tokens= configuration["LLM"]["OpenAI"]["MaxTokens"],
-    # top_p= configuration["LLM"]["OpenAI"]["TopP"]
+    model= configuration["LLM"]["OpenAI"]["Model"],
+    temperature= configuration["LLM"]["OpenAI"]["Temperature"],
+    max_tokens= configuration["LLM"]["OpenAI"]["MaxTokens"],
+    top_p= configuration["LLM"]["OpenAI"]["TopP"]
 )
 
 def respondToFaq(query):
