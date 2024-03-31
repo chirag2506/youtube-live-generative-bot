@@ -28,6 +28,12 @@
             "MaxTokens": 50
         }
     },
+    "Database": {
+        "Collections": {
+            "ViewerData": "viewers",
+            "Stream": "stream"
+        }
+    },
     "GCP": {
         "ClientCredentials": "config/client_secret.json",
         "OAuthToken": "config/token.json",

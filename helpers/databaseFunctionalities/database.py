@@ -1,6 +1,6 @@
 
 from pymongo.mongo_client import MongoClient
-from appUtils import log
+from appUtils import configuration
 import os
 
 connectionString = "mongodb+srv://{}:{}@youtube-live-manager.2gady4u.mongodb.net/?retryWrites=true&w=majority&appName=youtube-live-manager".format(
@@ -10,10 +10,4 @@ connectionString = "mongodb+srv://{}:{}@youtube-live-manager.2gady4u.mongodb.net
 # Create a new client and connect to the server
 client = MongoClient(connectionString)
 db = client[os.environ["MONGO_DB_NAME"]]
-
-# Send a ping to confirm a successful connection
-try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
+viewerCollection = db[configuration["Database"]["Collections"]["ViewerData"]]

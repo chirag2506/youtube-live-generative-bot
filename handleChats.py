@@ -26,7 +26,8 @@ def handleChats(client, chatId):
             if message.text.startswith("!"):
                 respondToChat(client, message, chatId, mods)
         print("*"*100)
-        nextPageToken = chats.nextPage
+        if chats.nextPage != "":
+            nextPageToken = chats.nextPage
         del chats
         del mods
     else:
