@@ -1,8 +1,9 @@
-from appUtils import log, configuration
+from appUtils import log, configuration, localizeTime
 from googleapiclient.discovery import Resource
 from helpers.youtubeFunctionalities.schemas import Message, Chat
-from helpers.youtubeFunctionalities.users import getUserFromId
 from helpers.llmFunctionalities.llm import respondToFaq
+from datetime import datetime
+import pytz
 from typing import List
 from copy import deepcopy
 
@@ -14,13 +15,16 @@ def getLiveChats(client: Resource, liveChatId: str,  pageToken: str = "", part: 
         ).execute()
         items = ytResponse.get("items", [])
         for item in items:
+            messageTime = item.get("snippet", {}).get("publishedAt", "")
+            messageTime = datetime.fromisoformat(messageTime) if messageTime != "" else datetime.now(pytz.utc)
             message = Message(
                 id= item.get("id", ""),
                 userId= item.get("snippet", {}).get("authorChannelId", ""),
                 text= item.get("snippet", {}).get("displayMessage", ""),
-                pubTime= item.get("snippet", {}).get("publishedAt", "")
+                pubTime= localizeTime(messageTime)
             )
             chat.messages.append(message)
+            del messageTime
             del message
         chat.nextPage = ytResponse.get("nextPageToken", "")
         del items
@@ -49,14 +53,16 @@ def respondToChat(client: Resource, message: Message, chatId: str, mods: List):
         response = respondToFaq(question)
         print(response)
     elif(command.lower() == "game"):
-        response = "I am currently playing {}".format(configuration["Youtube"]["CurrentGame"])
+        response = "Percy is currently playing {}".format(configuration["Youtube"]["CurrentGame"])
         # configuration["Youtube"]["CurrentGame"] = "NEW GAME"
-    elif(command.lower() == "points"):
-        response = "Sorry people! I am developing the loyalty system right now. It will take some time."
+    elif(command.lower() == "quests"):
+        response = "Sorry people! Percy is developing the loyalty system right now. It will take some time."
     else:
-        response = "Invalid command. Valid commands: !ask <query>, !game, !points"
+        response = "Invalid command. Valid commands: !ask <query>, !game, !quests"
     del query
     del command
     insertLiveChat(client, chatId, response)
     del response
+    del user
+    del id
     return

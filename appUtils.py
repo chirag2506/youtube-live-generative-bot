@@ -1,6 +1,8 @@
 from logger import putlog
+from datetime import datetime
 import json
 import os
+import pytz
 
 log = putlog(__file__)
 
@@ -51,3 +53,17 @@ def writeJson(filename, content):
 
 configFile = "config/app.setting.json"
 configuration = readJson(configFile)
+
+def localizeTime(time: datetime) -> datetime:
+    try:
+        timeZone = pytz.timezone(configuration["App"]["TimeZone"])
+        if time.tzinfo is None:
+            print("NONE")
+            time = pytz.utc.localize(time)
+            # newTime = timeZone.localize(time)
+        # else:
+        print("AS")
+        newTime = time.astimezone(timeZone)
+    except Exception as e:
+        log.info("Error in localizing time: {}".format(e))
+    return newTime

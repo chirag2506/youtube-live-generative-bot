@@ -3,7 +3,8 @@
         "Mode": 0,
         "Host": "0.0.0.0",
         "Port": 8080,
-        "IsDev": true
+        "IsDev": true,
+        "TimeZone": "Asia/Kolkata"
     },
     "Youtube": {
         "CurrentGame": "Spider-Man 2",

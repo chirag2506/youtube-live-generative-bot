@@ -4,6 +4,7 @@ from helpers.youtubeFunctionalities.client import getClient
 from helpers.youtubeFunctionalities.stream import getStreamChatId
 from helpers.youtubeFunctionalities.chat import getLiveChats, respondToChat
 from helpers.youtubeFunctionalities.moderators import getModsList
+from helpers.databaseFunctionalities.viewers import handlePointUpdate
 from appUtils import log, configuration, readJson
 import os, threading, time
 
@@ -23,8 +24,10 @@ def handleChats(client, chatId):
             print("Text: ", message.text)
             print("Time: ", message.pubTime)
             print("*"*100)
-            if message.text.startswith("!"):
-                respondToChat(client, message, chatId, mods)
+            if message.userId != os.environ["MANAGER_ACCOUNT_YOUTUBE_ID"]:
+                handlePointUpdate(client, message, mods)
+                if message.text.startswith("!"):
+                    respondToChat(client, message, chatId, mods)
         print("*"*100)
         if chats.nextPage != "":
             nextPageToken = chats.nextPage

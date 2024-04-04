@@ -8,7 +8,7 @@ class JsonModel(BaseModel):
     
 class Viewer(JsonModel):
     name: str
-    id: str
+    channelId: str
     points: int
     mod: bool
     lastUpdate: datetime

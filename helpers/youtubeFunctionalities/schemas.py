@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 from typing import List
 import json
 
@@ -10,7 +11,7 @@ class Message(JsonModel):
     id: str
     userId: str
     text: str
-    pubTime: str
+    pubTime: datetime
     
 class Chat(JsonModel):
     messages: List[Message]
