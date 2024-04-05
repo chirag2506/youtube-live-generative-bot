@@ -12,3 +12,4 @@ class Viewer(JsonModel):
     points: int
     mod: bool
     lastUpdate: datetime
+    newMessage: bool = False

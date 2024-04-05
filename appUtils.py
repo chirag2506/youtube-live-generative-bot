@@ -58,12 +58,8 @@ def localizeTime(time: datetime) -> datetime:
     try:
         timeZone = pytz.timezone(configuration["App"]["TimeZone"])
         if time.tzinfo is None:
-            print("NONE")
             time = pytz.utc.localize(time)
-            # newTime = timeZone.localize(time)
-        # else:
-        print("AS")
-        newTime = time.astimezone(timeZone)
+        newTime = time.astimezone(timeZone).replace(microsecond=0)
+        return newTime
     except Exception as e:
         log.info("Error in localizing time: {}".format(e))
-    return newTime

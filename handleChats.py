@@ -25,9 +25,10 @@ def handleChats(client, chatId):
             print("Time: ", message.pubTime)
             print("*"*100)
             if message.userId != os.environ["MANAGER_ACCOUNT_YOUTUBE_ID"]:
-                handlePointUpdate(client, message, mods)
-                if message.text.startswith("!"):
-                    respondToChat(client, message, chatId, mods)
+                user = handlePointUpdate(client, message, mods)
+                if message.text.startswith("!") and user.newMessage == True:
+                    respondToChat(client, message, user, chatId)
+                del user
         print("*"*100)
         if chats.nextPage != "":
             nextPageToken = chats.nextPage

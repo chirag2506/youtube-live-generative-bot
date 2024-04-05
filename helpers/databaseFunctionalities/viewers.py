@@ -1,4 +1,4 @@
-from appUtils import log, localizeTime
+from appUtils import log, localizeTime, datetime
 from helpers.databaseFunctionalities.database import viewerCollection
 from helpers.databaseFunctionalities.schemas import Viewer
 from googleapiclient.discovery import Resource
@@ -23,9 +23,19 @@ def addViewer(user: Viewer) -> str:
         log.error("Error in inserting user to database: {}".format(e))
         return None
 
-def updateViewerPoints(id: ObjectId, score: int = 1) -> int:
-
-    return
+def updateViewerPoints(id: ObjectId, messageTime: datetime, score: int = 1) -> int:
+    points = 0
+    try:
+        points = viewerCollection.find_one_and_update(
+            {"_id": id},
+            {
+                '$inc': {'Points': score},
+                '$set': {'LastUpdated': messageTime}
+            }
+        )["Points"]
+    except Exception as e:
+        log.error("Error in updating points: {}".format(e))
+    return points
 
 def getViewerId(channelId: str) -> str | None:
     viewerDataId = None
@@ -38,7 +48,7 @@ def getViewerId(channelId: str) -> str | None:
         log.error("Error in getting user ID: {}".format(e))
     return viewerDataId
 
-def handlePointUpdate(client: Resource, message: Message, mods: List):
+def handlePointUpdate(client: Resource, message: Message, mods: List) -> Viewer:
     viewerDataId = getViewerId(message.userId)
     user = Viewer(
         name= "", channelId= message.userId, points=1,
@@ -50,12 +60,18 @@ def handlePointUpdate(client: Resource, message: Message, mods: List):
     else:
         viewer = viewerCollection.find_one({"_id": ObjectId(viewerDataId)})
         user.name = viewer["Name"]
-        if localizeTime(viewer["LastUpdated"]) < message.pubTIme:
+        if localizeTime(viewer["LastUpdated"]) < message.pubTime:
             #update
-            points = updateViewerPoints(id= ObjectId(viewerDataId), score= 1)
+            user.newMessage = True
+            points = updateViewerPoints(id= ObjectId(viewerDataId), messageTime= message.pubTime, score= 1)
         else:
-            # getUserPoints
-            True
+            points = None
+        if points is not None and points != 0:
+            user.points = points
+        else:
+            user.points = viewer["Points"]
+            user.lastUpdate = localizeTime(viewer["LastUpdated"])
+        del points
         del viewer
-    return
+    return user
 

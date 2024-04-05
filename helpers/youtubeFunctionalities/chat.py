@@ -1,6 +1,7 @@
 from appUtils import log, configuration, localizeTime
 from googleapiclient.discovery import Resource
 from helpers.youtubeFunctionalities.schemas import Message, Chat
+from helpers.databaseFunctionalities.schemas import Viewer
 from helpers.llmFunctionalities.llm import respondToFaq
 from datetime import datetime
 import pytz
@@ -44,25 +45,28 @@ def insertLiveChat(client: Resource, liveChatId: str, message: str, part: str = 
         log.error("Error in sending message: {}".format(e))
     return 
 
-def respondToChat(client: Resource, message: Message, chatId: str, mods: List):
+def respondToChat(client: Resource, message: Message, user: Viewer, chatId: str):
     query = message.text.split(" ")
     command = query[0][1:]
     if(command.lower() == "ask"):
         query.pop(0)
         question = (" ").join(query)
         response = respondToFaq(question)
-        print(response)
     elif(command.lower() == "game"):
         response = "Percy is currently playing {}".format(configuration["Youtube"]["CurrentGame"])
         # configuration["Youtube"]["CurrentGame"] = "NEW GAME"
     elif(command.lower() == "quests"):
-        response = "Sorry people! Percy is developing the loyalty system right now. It will take some time."
+        response = "You have completed {} quests. Keep chatting to increase the number of quests and !redeem to to redeem the quests for a reward.".format(user.points)
+    elif(command.lower() == "redeem"):
+        response = "Sorry people! Percy is developing the redeem system right now. It will take some time. For now, continue to chat to complete as many quests as you can."
+    elif(command.lower() == "help"):
+        response = "!ask <query> to ask a question, !game to get current game name, !quests to get your current loyalty points, !redeem <item> to redeem quests (for more info, use !ask)"
     else:
-        response = "Invalid command. Valid commands: !ask <query>, !game, !quests"
+        response = "I'm sorry but this is an invalid command. type !help to get list of commands."
     del query
     del command
+    response = "@{} {}".format(user.name, response)
+    log.info("Bot Response: {}".format(response))
     insertLiveChat(client, chatId, response)
     del response
-    del user
-    del id
     return
