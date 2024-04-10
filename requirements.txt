@@ -44,6 +44,7 @@ multidict==6.0.5
 mypy-extensions==1.0.0
 numpy==1.26.4
 oauthlib==3.2.2
+obsws-python==1.7.0
 openai==1.14.3
 orjson==3.9.15
 packaging==23.2
@@ -72,5 +73,6 @@ typing_extensions==4.10.0
 uritemplate==4.1.1
 urllib3==2.2.1
 waitress==3.0.0
+websocket-client==1.7.0
 Werkzeug==3.0.1
 yarl==1.9.4

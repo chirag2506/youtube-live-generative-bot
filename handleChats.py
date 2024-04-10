@@ -4,7 +4,7 @@ from helpers.youtubeFunctionalities.client import getClient
 from helpers.youtubeFunctionalities.stream import getStreamChatId
 from helpers.youtubeFunctionalities.chat import getLiveChats, respondToChat
 from helpers.youtubeFunctionalities.moderators import getModsList
-from helpers.databaseFunctionalities.viewers import handlePointUpdate
+from helpers.databaseFunctionalities.viewers import getViewerWithPoints
 from appUtils import log, configuration, readJson
 import os, threading, time
 
@@ -25,7 +25,7 @@ def handleChats(client, chatId):
             print("Time: ", message.pubTime)
             print("*"*100)
             if message.userId != os.environ["MANAGER_ACCOUNT_YOUTUBE_ID"]:
-                user = handlePointUpdate(client, message, mods)
+                user = getViewerWithPoints(client, message, mods)
                 if message.text.startswith("!") and user.newMessage == True:
                     respondToChat(client, message, user, chatId)
                 del user

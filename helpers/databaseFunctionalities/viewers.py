@@ -1,4 +1,4 @@
-from appUtils import log, localizeTime, datetime
+from appUtils import log, localizeTime, datetime, pytz
 from helpers.databaseFunctionalities.database import viewerCollection
 from helpers.databaseFunctionalities.schemas import Viewer
 from googleapiclient.discovery import Resource
@@ -48,7 +48,7 @@ def getViewerId(channelId: str) -> str | None:
         log.error("Error in getting user ID: {}".format(e))
     return viewerDataId
 
-def handlePointUpdate(client: Resource, message: Message, mods: List) -> Viewer:
+def getViewerWithPoints(client: Resource, message: Message, mods: List) -> Viewer:
     viewerDataId = getViewerId(message.userId)
     user = Viewer(
         name= "", channelId= message.userId, points=1,
@@ -75,3 +75,11 @@ def handlePointUpdate(client: Resource, message: Message, mods: List) -> Viewer:
         del viewer
     return user
 
+def handleRedeemPoints(channelId: str, redeemCost: int, updateTime: datetime) -> int | None:
+    points = None
+    try:
+        viewerDataId = getViewerId(channelId)
+        points = updateViewerPoints(id= ObjectId(viewerDataId), messageTime= updateTime, score= -abs(redeemCost))
+    except Exception as e:
+        log.error("Error in handling redeem points".format(e))
+    return points

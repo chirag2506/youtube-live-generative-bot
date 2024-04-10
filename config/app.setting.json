@@ -35,6 +35,11 @@
             "Stream": "stream"
         }
     },
+    "OBS": {
+        "Port": 4455,
+        "Timeout": 3,
+        "RedeemScreens": ["PlayStation"]
+    },
     "GCP": {
         "ClientCredentials": "config/client_secret.json",
         "OAuthToken": "config/token.json",
